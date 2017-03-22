@@ -1,15 +1,18 @@
+CC = gcc
 CFLAGS = -Wall -Werror -Wextra
 
-sources = solution.c tree.c list.c
+sources = solution.c tree.c list.c commands.c
 objects = $(sources:.c=.o)
 
 solution: $(objects)
-	cc -o $@
+	$(CC) -o $@ $^
 
 %.o: %.c
-	cc $CFLAGS -o $@ $<
+	$(CC) -c $(CFLAGS) -o $@ $<
 
-solution.o: tree.h
+solution.o: tree.h commands.h
+
+commands.o: tree.h
 
 tree.o: list.h
 
