@@ -1,15 +1,12 @@
-#ifdef	TREE_H
+#ifndef	TREE_H
 #define	TREE_H
 
 struct Tree;
+typedef struct Tree Tree;
 
-extern void initializeTree(Tree* tree);
-
+extern void initializeTree(Tree**);
+extern void destroyTree(Tree*);
+extern void addTreeNode(Tree*, int);
 extern int getTreeNodesAmount(Tree*);
-
-// Adds node and puts it as a 'parentIndex' node's rightmost child. */
-extern void addTreeNode(Tree* tree, int parentIndex);
-
-extern int getTreeNodeRightmostChildIndex(Tree* tree, int parentIndex);
 
 #endif /* TREE_H */
