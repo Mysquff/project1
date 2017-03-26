@@ -8,6 +8,7 @@ extern void initializeTree(Tree**);
 extern void destroyTree(Tree*);
 extern void addTreeNode(Tree*, int);
 extern int getTreeNodesAmount(Tree*);
-extern int getRightmostChildIndex(Tree*, int);
+extern int getIndexOfRightmostChild(Tree*, int);
+extern void deleteTreeNodeByIndex(Tree*, int);
 
 #endif /* TREE_H */

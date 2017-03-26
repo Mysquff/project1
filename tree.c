@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "list.h"
 #include "tree.h"
@@ -14,10 +15,12 @@ struct Tree {
 /* DECLARATIONS */
 void initializeTree(Tree**);
 void destroyTree(Tree*);
-Node* getNodeByIndex(Tree*, int);
+void destroyTreeNodeByIndex(Tree*, int);
+Node* getTreeNodeByIndex(Tree*, int);
 void addTreeNode(Tree*, int);
 int getTreeNodesAmount(Tree*);
-int getRightmostChildIndex(Tree*, int);
+int getIndexOfRightmostChild(Tree*, int);
+void deleteTreeNodeByIndex(Tree*, int);
 
 // Initializes tree.
 void initializeTree(Tree** treePointer) {
@@ -44,8 +47,7 @@ void destroyTree(Tree* tree) {
 
 	// Destroy all tree nodes.
 	for (int i = 0; i < tree->nodesAmount; i++) {
-		Node* node = getNodeByIndex(tree, i);
-		destroyNode(node);
+		destroyTreeNodeByIndex(tree, i);
 	}
 
 	// Destroy the nodes array.
@@ -56,7 +58,7 @@ void destroyTree(Tree* tree) {
 }
 
 // Returns a pointer to the node by its index.
-Node* getNodeByIndex(Tree* tree, int index) {
+Node* getTreeNodeByIndex(Tree* tree, int index) {
 	return tree->nodesArray[index];
 }
 
@@ -74,7 +76,7 @@ void addTreeNode(Tree* tree, int parentIndex) {
 	(tree->nodesAmount)++;
 
 	// Put node into parent's children list.
-	Node* parent = getNodeByIndex(tree, parentIndex);
+	Node* parent = getTreeNodeByIndex(tree, parentIndex);
 	AddNodeToParent(parent, node);
 }
 
@@ -84,9 +86,9 @@ int getTreeNodesAmount(Tree* tree) {
 }
 
 // Returns an index of a rightmost child. If a child doesn't exist, returns -1.
-int getRightmostChildIndex(Tree* tree, int parentIndex) {
+int getIndexOfRightmostChild(Tree* tree, int parentIndex) {
 
-	Node* parent = getNodeByIndex(tree, parentIndex);
+	Node* parent = getTreeNodeByIndex(tree, parentIndex);
 	Node* rightmostChild = getRightmostChild(parent);
 
 	if (rightmostChild) {
@@ -95,5 +97,32 @@ int getRightmostChildIndex(Tree* tree, int parentIndex) {
 
 	else {
 		return -1;
+	}
+}
+
+// Deletes node and puts its children in its place.
+void deleteTreeNodeByIndex(Tree* tree, int index) {
+
+	Node* node = getTreeNodeByIndex(tree, index);
+
+	// Delete node from its parent's list and put children in its place.
+	deleteNode(node);
+
+	// Delete node from nodes array and free its memory.
+	destroyTreeNodeByIndex(tree, index);
+
+}
+
+void destroyTreeNodeByIndex(Tree* tree, int index) {
+
+	Node* node = getTreeNodeByIndex(tree, index);
+
+	if (node) {
+
+		// Delete node from nodes array.
+		tree->nodesArray[index] = NULL;
+
+		// Free its memory.
+		free(node);
 	}
 }
