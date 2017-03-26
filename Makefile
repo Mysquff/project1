@@ -6,6 +6,9 @@ sources = solution.c tree.c list.c commands.c
 objects = $(sources:.c=.o)
 debug_objects = $(sources:.c=.do)
 
+.PHONY: all
+all: solution debug
+
 solution: $(objects)
 	$(CC) -o $@ $^
 
