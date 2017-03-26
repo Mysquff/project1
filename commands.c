@@ -7,7 +7,6 @@
 /* COMMAND FUNCTIONS DECLARATIONS */
 
 Command selectCommand(char*);
-
 void commandAddNode(Tree*, int);
 void commandRightmostChild(Tree*, int);
 void commandDeleteNode(Tree*, int);
