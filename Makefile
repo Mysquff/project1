@@ -2,12 +2,9 @@ CC = gcc
 CFLAGS = -Wall -Werror -Wextra
 DEBUG_CFLAGS = -g $(CFLAGS)
 
-sources = solution.c tree.c list.c commands.c
+sources = solution.c tree.c list.c commands.c parse.c
 objects = $(sources:.c=.o)
 debug_objects = $(sources:.c=.do)
-
-.PHONY: all
-all: solution debug
 
 solution: $(objects)
 	$(CC) -o $@ $^
@@ -18,11 +15,16 @@ solution: $(objects)
 %.do: %.c
 	$(CC) -c $(DEBUG_CFLAGS) -o $@ $<
 
-solution.o solution.do: tree.h commands.h
+solution.o solution.do: tree.h commands.h parse.h
 
 commands.o commands.do: tree.h commands.h
 
 tree.o tree.do: list.h tree.h
+
+parse.o parse.do: tree.h parse.h
+
+.PHONY: all
+all: solution debug
 
 .PHONY: debug
 debug: $(debug_objects)
