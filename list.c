@@ -22,6 +22,8 @@ void initializeNode(Node**, int);
 void destroyNode(Node*);
 void linkNodes(Node*, Node*);
 void AddNodeToParent(Node*, Node*);
+int getIndex(Node*);
+Node* getRightmostChild(Node*);
 
 /* FUNCTION DEFINITIONS */
 
@@ -112,5 +114,20 @@ void AddNodeToParent(Node* parent, Node* child) {
 		// Link new child to parent.
 		child->parent = parent;
 	}
+}
 
+// Returns node's index. If the node doesn't exist, returns -1.
+int getIndex(Node* node) {
+	if (node) {
+		return node->index;
+	}
+
+	else {
+		return -1;
+	}
+}
+
+// Returns rightmost child.
+Node* getRightmostChild(Node* parent) {
+	return parent->rightmostChild;
 }

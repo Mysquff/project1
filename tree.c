@@ -17,6 +17,7 @@ void destroyTree(Tree*);
 Node* getNodeByIndex(Tree*, int);
 void addTreeNode(Tree*, int);
 int getTreeNodesAmount(Tree*);
+int getRightmostChildIndex(Tree*, int);
 
 // Initializes tree.
 void initializeTree(Tree** treePointer) {
@@ -80,4 +81,19 @@ void addTreeNode(Tree* tree, int parentIndex) {
 // Returns number of nodes in the tree.
 int getTreeNodesAmount(Tree* tree) {
 	return tree->nodesAmount;
+}
+
+// Returns an index of a rightmost child. If a child doesn't exist, returns -1.
+int getRightmostChildIndex(Tree* tree, int parentIndex) {
+
+	Node* parent = getNodeByIndex(tree, parentIndex);
+	Node* rightmostChild = getRightmostChild(parent);
+
+	if (rightmostChild) {
+		return getIndex(rightmostChild);
+	}
+
+	else {
+		return -1;
+	}
 }
