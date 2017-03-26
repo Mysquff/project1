@@ -11,5 +11,8 @@ extern void linkNodes(Node*, Node*);
 extern void AddNodeToParent(Node*, Node*);
 extern int getIndex(Node*);
 extern Node* getRightmostChild(Node*);
+extern bool isLeftmostChild(Node*);
+extern bool isRightmostChild(Node*);
+extern void deleteNode(Node*);
 
 #endif /* LIST_H */
