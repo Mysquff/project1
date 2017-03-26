@@ -141,10 +141,6 @@ bool isLeftmostChild(Node* node) {
 
 	// Node is a leftmost child.
 	if (node->left == NULL) {
-
-		// Asserts child has pointer to its parent set.
-		assert(node->parent);
-
 		return true;
 	}
 
@@ -159,10 +155,6 @@ bool isRightmostChild(Node* node) {
 
 	// Node is a rightmost child.
 	if (node->right == NULL) {
-
-		// Asserts child has pointer to its parent set.
-		assert(node->parent);
-
 		return true;
 	}
 
@@ -176,21 +168,20 @@ bool isRightmostChild(Node* node) {
 void setLeftmostChild(Node* parent, Node* child) {
 
 	if (child) {
+		// Assert child can be made leftmost child.
+		assert(child->left == NULL);
 
+		child->parent = parent;
 	}
 
-	// Asserts child can be made leftmost child.
-	assert(child->left == NULL);
-
 	parent->leftmostChild = child;
-	child->parent = parent;
 }
 
 // Sets parent's rightmost child and accordingly sets rightmost child's parent.
 void setRightmostChild(Node* parent, Node* child) {
 
 	if (child) {
-		// Asserts child can be made rightmost child.
+		// Assert child can be made rightmost child.
 		assert(child->right == NULL);
 
 		child->parent = parent;
@@ -212,24 +203,61 @@ void deleteNode(Node* node) {
 	}
 
 	else if (isLeftmostChild(node)) {
-		// Set node's leftmost child as its parent's leftmost child.
-		setLeftmostChild(parent, node->leftmostChild);
+		// Node has children.
+		if (node->leftmostChild) {
+			// Assert node has also rightmost child.
+			assert(node->rightmostChild);
 
-		// Link right neighbour with rightmost child.
-		linkNodes(node->rightmostChild, node->right);
+			// Link right neighbour with rightmost child.
+			linkNodes(node->rightmostChild, node->right);
+
+			// Set node's leftmost child as its parent's leftmost child.
+			setLeftmostChild(parent, node->leftmostChild);
+		}
+
+		// Node has no children.
+		else {
+			// Assert node has no link to rightmost child.
+			assert(!(node->leftmostChild));
+
+			// Link right neighbour with rightmost child.
+			linkNodes(node->rightmostChild, node->right);
+
+			// Set right neighbour to leftmost child.
+			setLeftmostChild(parent, node->right);
+		}
 	}
 
-	else if (isRightmostChild(node)) {
-		// Set node's rightmost child as its parent's rightmost child.
-		setRightmostChild(parent, node->rightmostChild);
 
-		// Link left neighbour with leftmost child.
-		linkNodes(node->left, node->leftmostChild);
+	else if (isRightmostChild(node)) {
+		// Node has children.
+		if (node->rightmostChild) {
+			// Assert node has also leftmost child.
+			assert(node->leftmostChild);
+
+			// Link left neighbour with leftmost child.
+			linkNodes(node->left, node->leftmostChild);
+
+			// Set node's rightmost child as its parent's rightmost child.
+			setRightmostChild(parent, node->rightmostChild);
+		}
+
+		// Node has no children.
+		else {
+			// Assert node has no link to leftmost child.
+			assert(!(node->rightmostChild));
+
+			// Link left neighbour with leftmost child.
+			linkNodes(node->left, node->leftmostChild);
+
+			// Set left neighbour to rightmost child.
+			setRightmostChild(parent, node->left);
+		}
 	}
 
 	else { // Node is not border child.
 
-		// Asserts pointer to parent is set to NULL.
+		// Assert pointer to parent is set to NULL.
 		assert(parent == NULL);
 
 		// Link neighbours with border children.
