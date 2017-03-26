@@ -27,4 +27,4 @@ debug: $(debug_objects)
 
 .PHONY: clean
 clean:
-	-rm $(objects) $(debug_objects) solution solution.gdb
+	-rm -f $(objects) $(debug_objects) solution solution.gdb
