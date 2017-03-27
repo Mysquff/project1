@@ -4,7 +4,7 @@
 #include "list.h"
 #include "tree.h"
 
-#define MAXIMUM_NUMBER_OF_NODES 500100
+#define MAXIMUM_NUMBER_OF_NODES 500000
 
 struct Tree {
 	int nodesAmount;
@@ -19,8 +19,12 @@ void destroyTreeNodeByIndex(Tree*, int);
 Node* getTreeNodeByIndex(Tree*, int);
 void addTreeNode(Tree*, int);
 int getTreeNodesAmount(Tree*);
-int getIndexOfRightmostChild(Tree*, int);
+int getRightmostChildIndexByParentIndex(Tree*, int);
 void deleteTreeNodeByIndex(Tree*, int);
+void deleteSubtreeByIndex(Tree*, int);
+void deleteSubtree(Tree*, Node*);
+void destroyTreeNodesRecursivelyByIndex(Tree*, int);
+
 
 // Initializes tree.
 void initializeTree(Tree** treePointer) {
@@ -86,18 +90,11 @@ int getTreeNodesAmount(Tree* tree) {
 }
 
 // Returns an index of a rightmost child. If a child doesn't exist, returns -1.
-int getIndexOfRightmostChild(Tree* tree, int parentIndex) {
+int getRightmostChildIndexByParentIndex(Tree* tree, int parentIndex) {
 
 	Node* parent = getTreeNodeByIndex(tree, parentIndex);
-	Node* rightmostChild = getRightmostChild(parent);
 
-	if (rightmostChild) {
-		return getIndex(rightmostChild);
-	}
-
-	else {
-		return -1;
-	}
+	return getRightmostChildIndex(parent);
 }
 
 // Deletes node and puts its children in its place.
@@ -118,11 +115,52 @@ void destroyTreeNodeByIndex(Tree* tree, int index) {
 	Node* node = getTreeNodeByIndex(tree, index);
 
 	if (node) {
-
 		// Delete node from nodes array.
 		tree->nodesArray[index] = NULL;
 
-		// Free its memory.
-		free(node);
+		// Destroy node.
+		destroyNode(node);
+	}
+}
+
+void deleteSubtreeByIndex(Tree* tree, int subtreeRootIndex) {
+	Node* subtreeRoot = getTreeNodeByIndex(tree, subtreeRootIndex);
+	deleteSubtree(tree, subtreeRoot);
+}
+
+void deleteSubtree(Tree* tree, Node* subtreeRoot) {
+
+	// Disconnect root node from its parent and neighbours.
+	deleteNodeAndItsChildren(subtreeRoot);
+
+	// Destroy subtree recursively.
+	int subtreeRootIndex = getIndex(subtreeRoot);
+	destroyTreeNodesRecursivelyByIndex(tree, subtreeRootIndex);
+}
+
+// Destroy subtree recursively by indexes.
+void destroyTreeNodesRecursivelyByIndex(Tree* tree, int index) {
+
+	Node* node = getTreeNodeByIndex(tree, index);
+
+	if (node) {
+
+		// Destroy nodes below, starting from the leftmost child.
+		int leftmostChildIndex = getLeftmostChildIndex(node);
+
+		if (leftmostChildIndex != -1) {
+			destroyTreeNodesRecursivelyByIndex(tree, leftmostChildIndex);
+		}
+
+
+		// Destroy nodes on the right.
+		int rightNeighbourIndex = getRightNeighbourIndex(node);
+
+		if (rightNeighbourIndex != -1) {
+			destroyTreeNodesRecursivelyByIndex(tree, rightNeighbourIndex);
+		}
+
+		// Destroy node.
+		destroyTreeNodeByIndex(tree, index);
 	}
 }
