@@ -25,5 +25,8 @@ extern void commandRightmostChild(Tree*, int);
 // DELETE_NODE
 extern void commandDeleteNode(Tree*, int);
 
+// DELETE_SUBTREE
+extern void commandDeleteSubtree(Tree*, int);
+
 
 #endif /* COMMANDS_H */

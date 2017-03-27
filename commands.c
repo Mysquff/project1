@@ -10,6 +10,7 @@ Command selectCommand(char*);
 void commandAddNode(Tree*, int);
 void commandRightmostChild(Tree*, int);
 void commandDeleteNode(Tree*, int);
+void commandDeleteSubtree(Tree*, int);
 
 /* COMMAND FUNCTIONS DEFINITIONS */
 
@@ -55,11 +56,17 @@ void commandAddNode(Tree* tree, int parentIndex) {
 
 // RIGHTMOST_CHILD
 void commandRightmostChild(Tree* tree, int parentIndex) {
-	int rightmostChildIndex = getIndexOfRightmostChild(tree, parentIndex);
+	int rightmostChildIndex;
+	rightmostChildIndex = getRightmostChildIndexByParentIndex(tree, parentIndex);
 	printf("%d\n", rightmostChildIndex);
 }
 
 // DELETE_NODE
 void commandDeleteNode(Tree* tree, int index) {
 	deleteTreeNodeByIndex(tree, index);
+}
+
+// DELETE_SUBTREE
+void commandDeleteSubtree(Tree* tree, int subtreeRootIndex) {
+	deleteSubtreeByIndex(tree, subtreeRootIndex);
 }
