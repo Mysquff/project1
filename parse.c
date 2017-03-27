@@ -41,7 +41,7 @@ void parseInput(Tree* tree, bool isDebugMode) {
 
 			case COMMAND_DELETE_SUBTREE:
 				scanf("%d", &parameter1);
-				// commandSubtree(tree, parameter1);
+				commandDeleteSubtree(tree, parameter1);
 				printf("OK\n");
 			break;
 
