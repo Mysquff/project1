@@ -24,13 +24,31 @@ void initializeNode(Node**, int);
 void destroyNode(Node*);
 void linkNodes(Node*, Node*);
 void AddNodeToParent(Node*, Node*);
-int getIndex(Node*);
-Node* getRightmostChild(Node*);
+void deleteNode(Node*);
+void deleteNodeAndItsChildren(Node*);
+
+// Bolean checkers.
 bool isLeftmostChild(Node*);
 bool isRightmostChild(Node*);
+
+// Getters.
+int getIndex(Node*);
+Node* getLeftmostChild(Node*);
+Node* getRightmostChild(Node*);
+Node* getLeftNeighbour(Node*);
+Node* getRightNeighbour(Node*);
+int getLeftmostChildIndex(Node*);
+int getRightmostChildIndex(Node*);
+int getLeftNeighbourIndex(Node*);
+int getRightNeighbourIndex(Node*);
+
+// Setters.
+void setParent(Node*, Node*);
 void setLeftmostChild(Node*, Node*);
 void setRightmostChild(Node*, Node*);
-void deleteNode(Node*);
+void setLeftNeighbour(Node*, Node*);
+void setRightNeighbour(Node*, Node*);
+
 
 /* FUNCTION DEFINITIONS */
 
@@ -77,7 +95,7 @@ void linkNodes(Node* leftNode, Node* rightNode) {
 	}
 
 	// Only right node exists.
-	else {
+	else if (rightNode) {
 		rightNode->left = NULL;
 	}
 }
@@ -126,14 +144,67 @@ void AddNodeToParent(Node* parent, Node* child) {
 
 // Returns node's index. If the node doesn't exist, returns -1.
 int getIndex(Node* node) {
-	assert(node);
-	return node->index;
+
+	if (node) {
+		return node->index;
+	}
+
+	else {
+		return -1;
+	}
+
+}
+
+// Returns leftmost child.
+Node* getLeftmostChild(Node* parent) {
+	assert(parent);
+	return parent->leftmostChild;
 }
 
 // Returns rightmost child.
 Node* getRightmostChild(Node* parent) {
 	assert(parent);
 	return parent->rightmostChild;
+}
+
+// Returns left neighbour.
+Node* getLeftNeighbour(Node* node) {
+	assert(node);
+	return node->left;
+}
+
+// Returns right neighbour.
+Node* getRightNeighbour(Node* node) {
+	assert(node);
+	return node->right;
+}
+
+// Returns leftmost child's index.
+int getLeftmostChildIndex(Node* parent) {
+	assert(parent);
+	Node* leftmostChild = getLeftmostChild(parent);
+	return getIndex(leftmostChild);
+}
+
+// Returns rightmost child's index.
+int getRightmostChildIndex(Node* parent) {
+	assert(parent);
+	Node* rightmostChild = getRightmostChild(parent);
+	return getIndex(rightmostChild);
+}
+
+// Returns left neighbour's index.
+int getLeftNeighbourIndex(Node* node) {
+	assert(node);
+	Node* leftNeighbour = getLeftNeighbour(node);
+	return getIndex(leftNeighbour);
+}
+
+// Returns right neighbour's index.
+int getRightNeighbourIndex(Node* node) {
+	assert(node);
+	Node* rightNeighbour = getRightNeighbour(node);
+	return getIndex(rightNeighbour);
 }
 
 // Checks if a node is leftmost child of its parent.
@@ -164,6 +235,11 @@ bool isRightmostChild(Node* node) {
 	}
 }
 
+// Sets node's pointer to parent.
+void setParent(Node* node, Node* parent) {
+	node->parent = parent;
+}
+
 // Sets parent's leftmost child and accordingly sets leftmost child's parent.
 void setLeftmostChild(Node* parent, Node* child) {
 
@@ -174,7 +250,9 @@ void setLeftmostChild(Node* parent, Node* child) {
 		child->parent = parent;
 	}
 
-	parent->leftmostChild = child;
+	if (parent) {
+		parent->leftmostChild = child;
+	}
 }
 
 // Sets parent's rightmost child and accordingly sets rightmost child's parent.
@@ -187,7 +265,24 @@ void setRightmostChild(Node* parent, Node* child) {
 		child->parent = parent;
 	}
 
-	parent->rightmostChild = child;
+	// There is no parent. Hence child is a root node.
+	if (parent) {
+		parent->rightmostChild = child;
+	}
+
+}
+
+// Sets node's left neighbour.
+void setLeftNeighbour(Node* node, Node* leftNeighbour) {
+	if (node) {
+		node->left = leftNeighbour;
+	}
+}
+
+void setRightNeighbour(Node* node, Node* rightNeighbour) {
+	if (node) {
+		node->right = rightNeighbour;
+	}
 }
 
 // Deletes node from its parent children list.
@@ -207,6 +302,9 @@ void deleteNode(Node* node) {
 		if (node->leftmostChild) {
 			// Assert node has also rightmost child.
 			assert(node->rightmostChild);
+
+			// Reset node's rightmost child poiinter to parent.
+			setParent(node->rightmostChild, NULL);
 
 			// Link right neighbour with rightmost child.
 			linkNodes(node->rightmostChild, node->right);
@@ -228,12 +326,14 @@ void deleteNode(Node* node) {
 		}
 	}
 
-
 	else if (isRightmostChild(node)) {
 		// Node has children.
 		if (node->rightmostChild) {
 			// Assert node has also leftmost child.
 			assert(node->leftmostChild);
+
+			// Reset node's leftmost child pointer to parent.
+			setParent(node->leftmostChild, NULL);
 
 			// Link left neighbour with leftmost child.
 			linkNodes(node->left, node->leftmostChild);
@@ -258,10 +358,59 @@ void deleteNode(Node* node) {
 	else { // Node is not border child.
 
 		// Assert pointer to parent is set to NULL.
-		assert(parent == NULL);
+		assert(node->parent == NULL);
 
-		// Link neighbours with border children.
-		linkNodes(node->left, node->leftmostChild);
-		linkNodes(node->rightmostChild, node->right);
+		// Node has children.
+		if (node->leftmostChild && node->rightmostChild) {
+			// Reset neighbours links to parent.
+			setParent(node->leftmostChild, NULL);
+			setParent(node->rightmostChild, NULL);
+
+			// Link neighbours with border children.
+			linkNodes(node->left, node->leftmostChild);
+			linkNodes(node->rightmostChild, node->right);
+		}
+
+		// Node has no children.
+		else {
+			// Link node's neighbours to each other.
+			linkNodes(node->left, node->right);
+		}
+
+
 	}
+}
+
+void deleteNodeAndItsChildren(Node* subtreeRootNode) {
+
+	Node* parent = subtreeRootNode->parent;
+	Node* leftNeighbour = subtreeRootNode->left;
+	Node* rightNeighbour = subtreeRootNode->right;
+
+	// Subtree root node is only child.
+	if (isLeftmostChild(subtreeRootNode) && isRightmostChild(subtreeRootNode)) {
+		setRightmostChild(parent, NULL);
+		setLeftmostChild(parent, NULL);
+	}
+
+	// Subtree root node is leftmost child.
+	else if (isLeftmostChild(subtreeRootNode)) {
+		setLeftNeighbour(rightNeighbour, NULL);
+		setLeftmostChild(parent, rightNeighbour);
+	}
+
+	// Subtree root node is rightmost child.
+	else if (isRightmostChild(subtreeRootNode)) {
+		setRightNeighbour(leftNeighbour, NULL);
+		setRightmostChild(parent, leftNeighbour);
+	}
+
+	// Subtree is middle child.
+	else {
+		linkNodes(leftNeighbour, rightNeighbour);
+	}
+
+	subtreeRootNode->parent = NULL;
+	setLeftNeighbour(subtreeRootNode, NULL);
+	setRightNeighbour(subtreeRootNode, NULL);
 }
