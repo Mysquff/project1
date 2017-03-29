@@ -67,7 +67,7 @@ void increaseTreeNewNodeIndex(Tree* tree) {
 void destroyTree(Tree* tree) {
 
 	// Destroy all tree nodes.
-	for (int i = 0; i < tree->nodesAmount; i++) {
+	for (int i = 0; i < tree->newNodeIndex; i++) {
 		destroyTreeNodeByIndex(tree, i);
 	}
 
