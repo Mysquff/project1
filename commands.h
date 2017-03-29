@@ -28,5 +28,7 @@ extern void commandDeleteNode(Tree*, int);
 // DELETE_SUBTREE
 extern void commandDeleteSubtree(Tree*, int);
 
+// SPLIT_NODE
+void commandSplitNode(Tree*, int, int);
 
 #endif /* COMMANDS_H */

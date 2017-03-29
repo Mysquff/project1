@@ -70,3 +70,8 @@ void commandDeleteNode(Tree* tree, int index) {
 void commandDeleteSubtree(Tree* tree, int subtreeRootIndex) {
 	deleteSubtreeByIndex(tree, subtreeRootIndex);
 }
+
+// SPLIT_NODE
+void commandSplitNode(Tree* tree, int parentIndex, int leftNeighbourIndex) {
+	splitTreeNodeByIndex(tree, parentIndex, leftNeighbourIndex);
+}
