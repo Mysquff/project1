@@ -47,14 +47,14 @@ void parseInput(Tree* tree, bool isDebugMode) {
 
 			case COMMAND_SPLIT_NODE:
 				scanf("%d %d", &parameter1, &parameter2);
-				// commandSplitNode(tree, parameter1, parameter2);
+				commandSplitNode(tree, parameter1, parameter2);
 				printf("OK\n");
 			break;
 
 			default:
 			case COMMAND_UNKNOWN:
 				// Asserts command is allowed.
-				assert(true);
+				assert(command != COMMAND_UNKNOWN);
 			break;
 		}
 
