@@ -5,26 +5,16 @@
 struct Node;
 typedef struct Node Node;
 
-extern void initializeNode(Node**, int);
-extern void destroyNode(Node*);
-extern void deleteNode(Node*);
-extern void deleteNodeAndItsChildren(Node*);
-extern void linkNodes(Node*, Node*);
-extern void AddNodeToParent(Node*, Node*);
-extern void splitNode(Node*, Node*, Node*);
+extern void initializeListNode(Node**, int);
+extern void destroyListNode(Node*);
+extern void deleteListNode(Node*);
+extern void deleteListNodeAndItsChildren(Node*);
+extern void AddListNodeToParent(Node*, Node*);
+extern void splitListNode(Node*, Node*, Node*);
 
-
-extern bool isLeftmostChild(Node*);
-extern bool isRightmostChild(Node*);
-
-extern int getIndex(Node*);
-extern Node* getLeftmostChild(Node*);
-extern Node* getRightmostChild(Node*);
-extern Node* getLeftNeighbour(Node*);
-extern Node* getRightNeighbour(Node*);
-extern int getLeftmostChildIndex(Node*);
-extern int getRightmostChildIndex(Node*);
-extern int getLeftNeighbourIndex(Node*);
-extern int getRightNeighbourIndex(Node*);
+extern int getListNodeIndex(Node*);
+extern int getListNodeLeftmostChildIndex(Node*);
+extern int getListNodeRightmostChildIndex(Node*);
+extern int getListNodeRightNeighbourIndex(Node*);
 
 #endif /* LIST_H */

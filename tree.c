@@ -20,7 +20,7 @@ void destroyTreeNodeByIndex(Tree*, int);
 Node* getTreeNodeByIndex(Tree*, int);
 void addTreeNode(Tree*, int);
 int getTreeNodesAmount(Tree*);
-int getRightmostChildIndexByParentIndex(Tree*, int);
+int getTreeNodeRightmostChildIndexByIndex(Tree*, int);
 void deleteTreeNodeByIndex(Tree*, int);
 void deleteSubtreeByIndex(Tree*, int);
 void deleteSubtree(Tree*, Node*);
@@ -42,7 +42,7 @@ void initializeTree(Tree** treePointer) {
 
 	// Initialize root node.
 	Node** rootPointer = &(tree->nodesArray[0]);
-	initializeNode(rootPointer, 0);
+	initializeListNode(rootPointer, 0);
 
 	// Set nodes amount to 1.
 	tree->nodesAmount = 1;
@@ -88,7 +88,7 @@ void addTreeNode(Tree* tree, int parentIndex) {
 
 	// Initialize new node.
 	Node* node;
-	initializeNode(&node, tree->newNodeIndex);
+	initializeListNode(&node, tree->newNodeIndex);
 
 	// Place new node at the end of the nodes array.
 	(tree->nodesArray)[tree->newNodeIndex] = node;
@@ -101,7 +101,7 @@ void addTreeNode(Tree* tree, int parentIndex) {
 
 	// Put node into parent's children list.
 	Node* parent = getTreeNodeByIndex(tree, parentIndex);
-	AddNodeToParent(parent, node);
+	AddListNodeToParent(parent, node);
 }
 
 // Returns number of nodes in the tree.
@@ -110,11 +110,11 @@ int getTreeNodesAmount(Tree* tree) {
 }
 
 // Returns an index of a rightmost child. If a child doesn't exist, returns -1.
-int getRightmostChildIndexByParentIndex(Tree* tree, int parentIndex) {
+int getTreeNodeRightmostChildIndexByIndex(Tree* tree, int parentIndex) {
 
 	Node* parent = getTreeNodeByIndex(tree, parentIndex);
 
-	return getRightmostChildIndex(parent);
+	return getListNodeRightmostChildIndex(parent);
 }
 
 // Deletes node and puts its children in its place.
@@ -123,7 +123,7 @@ void deleteTreeNodeByIndex(Tree* tree, int index) {
 	Node* node = getTreeNodeByIndex(tree, index);
 
 	// Delete node from its parent's list and put children in its place.
-	deleteNode(node);
+	deleteListNode(node);
 
 	// Delete node from nodes array and free its memory.
 	destroyTreeNodeByIndex(tree, index);
@@ -139,7 +139,7 @@ void destroyTreeNodeByIndex(Tree* tree, int index) {
 		tree->nodesArray[index] = NULL;
 
 		// Destroy node.
-		destroyNode(node);
+		destroyListNode(node);
 
 		// Decreases nodes amount.
 		decreaseTreeNodesAmount(tree);
@@ -153,10 +153,10 @@ void deleteSubtreeByIndex(Tree* tree, int subtreeRootIndex) {
 
 void deleteSubtree(Tree* tree, Node* subtreeRoot) {
 	// Disconnect root node from its parent and neighbours.
-	deleteNodeAndItsChildren(subtreeRoot);
+	deleteListNodeAndItsChildren(subtreeRoot);
 
 	// Destroy subtree recursively.
-	int subtreeRootIndex = getIndex(subtreeRoot);
+	int subtreeRootIndex = getListNodeIndex(subtreeRoot);
 	destroyTreeNodesRecursivelyByIndex(tree, subtreeRootIndex);
 }
 
@@ -168,7 +168,7 @@ void destroyTreeNodesRecursivelyByIndex(Tree* tree, int index) {
 	if (node) {
 
 		// Destroy nodes below, starting from the leftmost child.
-		int leftmostChildIndex = getLeftmostChildIndex(node);
+		int leftmostChildIndex = getListNodeLeftmostChildIndex(node);
 
 		if (leftmostChildIndex != -1) {
 			destroyTreeNodesRecursivelyByIndex(tree, leftmostChildIndex);
@@ -176,7 +176,7 @@ void destroyTreeNodesRecursivelyByIndex(Tree* tree, int index) {
 
 
 		// Destroy nodes on the right.
-		int rightNeighbourIndex = getRightNeighbourIndex(node);
+		int rightNeighbourIndex = getListNodeRightNeighbourIndex(node);
 
 		if (rightNeighbourIndex != -1) {
 			destroyTreeNodesRecursivelyByIndex(tree, rightNeighbourIndex);
@@ -193,7 +193,7 @@ void splitTreeNodeByIndex(Tree* tree, int parentIndex, int leftNeighbourIndex) {
 
 	// Initialize new node.
 	Node* node;
-	initializeNode(&node, tree->newNodeIndex);
+	initializeListNode(&node, tree->newNodeIndex);
 
 	// Place new node at the end of the nodes array.
 	(tree->nodesArray)[tree->newNodeIndex] = node;
@@ -207,5 +207,5 @@ void splitTreeNodeByIndex(Tree* tree, int parentIndex, int leftNeighbourIndex) {
 	Node* parent = getTreeNodeByIndex(tree, parentIndex);
 	Node* leftNeighbour = getTreeNodeByIndex(tree, leftNeighbourIndex);
 
-	splitNode(parent, leftNeighbour, node);
+	splitListNode(parent, leftNeighbour, node);
 }

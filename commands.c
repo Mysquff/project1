@@ -57,7 +57,7 @@ void commandAddNode(Tree* tree, int parentIndex) {
 // RIGHTMOST_CHILD
 void commandRightmostChild(Tree* tree, int parentIndex) {
 	int rightmostChildIndex;
-	rightmostChildIndex = getRightmostChildIndexByParentIndex(tree, parentIndex);
+	rightmostChildIndex = getTreeNodeRightmostChildIndexByIndex(tree, parentIndex);
 	printf("%d\n", rightmostChildIndex);
 }
 

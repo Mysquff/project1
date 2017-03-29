@@ -20,28 +20,28 @@ struct Node {
 };
 
 /* FUNCTION DECLARATIONS */
-void initializeNode(Node**, int);
-void destroyNode(Node*);
+void initializeListNode(Node**, int);
+void destroyListNode(Node*);
 void linkNodes(Node*, Node*);
-void AddNodeToParent(Node*, Node*);
-void deleteNode(Node*);
-void deleteNodeAndItsChildren(Node*);
-void splitNode(Node*, Node*, Node*);
+void AddListNodeToParent(Node*, Node*);
+void deleteListNode(Node*);
+void deleteListNodeAndItsChildren(Node*);
+void splitListNode(Node*, Node*, Node*);
 
 // Bolean checkers.
 bool isLeftmostChild(Node*);
 bool isRightmostChild(Node*);
 
 // Getters.
-int getIndex(Node*);
-Node* getLeftmostChild(Node*);
+int getListNodeIndex(Node*);
+Node* getListNodeLeftmostChild(Node*);
 Node* getRightmostChild(Node*);
 Node* getLeftNeighbour(Node*);
 Node* getRightNeighbour(Node*);
-int getLeftmostChildIndex(Node*);
+int getListNodeLeftmostChildIndex(Node*);
 int getRightmostChildIndex(Node*);
 int getLeftNeighbourIndex(Node*);
-int getRightNeighbourIndex(Node*);
+int getListNodeRightNeighbourIndex(Node*);
 
 // Setters.
 void setParent(Node*, Node*);
@@ -54,7 +54,7 @@ void setRightNeighbour(Node*, Node*);
 /* FUNCTION DEFINITIONS */
 
 // Initializes node.
-void initializeNode(Node** nodePointer, int index) {
+void initializeListNode(Node** nodePointer, int index) {
 	// Allocate node.
 	(*nodePointer) = (Node*) malloc(sizeof (Node));
 
@@ -76,7 +76,7 @@ void initializeNode(Node** nodePointer, int index) {
 	node->parent = NULL;
 }
 // Destroys a node and frees its memory.
-void destroyNode(Node* node) {
+void destroyListNode(Node* node) {
 	assert(node);
 	free(node);
 }
@@ -102,7 +102,7 @@ void linkNodes(Node* leftNode, Node* rightNode) {
 }
 
 // Adds new child to parent
-void AddNodeToParent(Node* parent, Node* child) {
+void AddListNodeToParent(Node* parent, Node* child) {
 
 	// Parent node does not have children yet.
 	if (parent->leftmostChild == NULL && parent->rightmostChild == NULL) {
@@ -144,7 +144,7 @@ void AddNodeToParent(Node* parent, Node* child) {
 }
 
 // Returns node's index. If the node doesn't exist, returns -1.
-int getIndex(Node* node) {
+int getListNodeIndex(Node* node) {
 
 	if (node) {
 		return node->index;
@@ -157,7 +157,7 @@ int getIndex(Node* node) {
 }
 
 // Returns leftmost child.
-Node* getLeftmostChild(Node* parent) {
+Node* getListNodeLeftmostChild(Node* parent) {
 	assert(parent);
 	return parent->leftmostChild;
 }
@@ -181,31 +181,31 @@ Node* getRightNeighbour(Node* node) {
 }
 
 // Returns leftmost child's index.
-int getLeftmostChildIndex(Node* parent) {
+int getListNodeLeftmostChildIndex(Node* parent) {
 	assert(parent);
-	Node* leftmostChild = getLeftmostChild(parent);
-	return getIndex(leftmostChild);
+	Node* leftmostChild = getListNodeLeftmostChild(parent);
+	return getListNodeIndex(leftmostChild);
 }
 
 // Returns rightmost child's index.
-int getRightmostChildIndex(Node* parent) {
+int getListNodeRightmostChildIndex(Node* parent) {
 	assert(parent);
 	Node* rightmostChild = getRightmostChild(parent);
-	return getIndex(rightmostChild);
+	return getListNodeIndex(rightmostChild);
 }
 
 // Returns left neighbour's index.
 int getLeftNeighbourIndex(Node* node) {
 	assert(node);
 	Node* leftNeighbour = getLeftNeighbour(node);
-	return getIndex(leftNeighbour);
+	return getListNodeIndex(leftNeighbour);
 }
 
 // Returns right neighbour's index.
-int getRightNeighbourIndex(Node* node) {
+int getListNodeRightNeighbourIndex(Node* node) {
 	assert(node);
 	Node* rightNeighbour = getRightNeighbour(node);
-	return getIndex(rightNeighbour);
+	return getListNodeIndex(rightNeighbour);
 }
 
 // Checks if a node is leftmost child of its parent.
@@ -288,7 +288,7 @@ void setRightNeighbour(Node* node, Node* rightNeighbour) {
 
 // Deletes node from its parent children list.
 // and puts own children in the place in the list it occupied.
-void deleteNode(Node* node) {
+void deleteListNode(Node* node) {
 
 	Node* parent = node->parent;
 
@@ -382,7 +382,7 @@ void deleteNode(Node* node) {
 	}
 }
 
-void deleteNodeAndItsChildren(Node* subtreeRootNode) {
+void deleteListNodeAndItsChildren(Node* subtreeRootNode) {
 
 	Node* parent = subtreeRootNode->parent;
 	Node* leftNeighbour = subtreeRootNode->left;
@@ -418,7 +418,7 @@ void deleteNodeAndItsChildren(Node* subtreeRootNode) {
 
 // Adds new child of parent and puts it on the right of left neighbour.
 // All nodes on the right of left neighbour become children of a new node.
-void splitNode(Node* parent, Node* leftNeighbour, Node* node) {
+void splitListNode(Node* parent, Node* leftNeighbour, Node* node) {
 
 	// Left neighbour is parent's only child.
 	if (isLeftmostChild(leftNeighbour) && isRightmostChild(leftNeighbour)) {
