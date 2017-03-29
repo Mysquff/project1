@@ -26,6 +26,7 @@ void linkNodes(Node*, Node*);
 void AddNodeToParent(Node*, Node*);
 void deleteNode(Node*);
 void deleteNodeAndItsChildren(Node*);
+void splitNode(Node*, Node*, Node*);
 
 // Bolean checkers.
 bool isLeftmostChild(Node*);
@@ -413,4 +414,50 @@ void deleteNodeAndItsChildren(Node* subtreeRootNode) {
 	subtreeRootNode->parent = NULL;
 	setLeftNeighbour(subtreeRootNode, NULL);
 	setRightNeighbour(subtreeRootNode, NULL);
+}
+
+// Adds new child of parent and puts it on the right of left neighbour.
+// All nodes on the right of left neighbour become children of a new node.
+void splitNode(Node* parent, Node* leftNeighbour, Node* node) {
+
+	// Left neighbour is parent's only child.
+	if (isLeftmostChild(leftNeighbour) && isRightmostChild(leftNeighbour)) {
+
+		// Link left neighbour and node.
+		linkNodes(leftNeighbour, node);
+
+		// Set node as parent's rightmost child.
+		setRightmostChild(parent, node);
+	}
+
+	// Left neighbour is parent's rightmost child.
+	else if (isRightmostChild(leftNeighbour)) {
+		// Link left neighbour and node.
+		linkNodes(leftNeighbour, node);
+
+		// Set node as parent's rightmost child.
+		setRightmostChild(parent, node);
+
+		// Reset left neighbour link to parent.
+		setParent(leftNeighbour, NULL);
+	}
+
+	// Left neighbour is middle or leftmost child.
+	else {
+
+		// And reset its link to left neighbour.
+		setLeftNeighbour(leftNeighbour->right, NULL);
+
+		// Set right neighbour of the left neighbour as node's leftmost child.
+		setLeftmostChild(node, leftNeighbour->right);
+
+		// Set parent's rightmost child as node's rightmost child.
+		setRightmostChild(node, parent->rightmostChild);
+
+		// Set node as parent's rightmost child.
+		setRightmostChild(parent, node);
+
+		// Link left neighbour and node.
+		linkNodes(leftNeighbour, node);
+	}
 }

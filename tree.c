@@ -8,6 +8,7 @@
 
 struct Tree {
 	int nodesAmount;
+	int newNodeIndex;
 
 	Node** nodesArray;
 };
@@ -24,6 +25,7 @@ void deleteTreeNodeByIndex(Tree*, int);
 void deleteSubtreeByIndex(Tree*, int);
 void deleteSubtree(Tree*, Node*);
 void destroyTreeNodesRecursivelyByIndex(Tree*, int);
+void splitTreeNodeByIndex(Tree*, int, int);
 
 
 // Initializes tree.
@@ -44,6 +46,21 @@ void initializeTree(Tree** treePointer) {
 
 	// Set nodes amount to 1.
 	tree->nodesAmount = 1;
+
+	// Set new node index to 1.
+	tree->newNodeIndex = 1;
+}
+
+void decreaseTreeNodesAmount(Tree* tree) {
+	(tree->nodesAmount)--;
+}
+
+void increaseTreeNodesAmount(Tree* tree) {
+	(tree->nodesAmount)++;
+}
+
+void increaseTreeNewNodeIndex(Tree* tree) {
+	(tree->newNodeIndex)++;
 }
 
 // Destroys tree and frees its memory.
@@ -71,13 +88,16 @@ void addTreeNode(Tree* tree, int parentIndex) {
 
 	// Initialize new node.
 	Node* node;
-	initializeNode(&node, tree->nodesAmount);
+	initializeNode(&node, tree->newNodeIndex);
 
 	// Place new node at the end of the nodes array.
-	(tree->nodesArray)[tree->nodesAmount] = node;
+	(tree->nodesArray)[tree->newNodeIndex] = node;
 
 	// Increase number of nodes.
-	(tree->nodesAmount)++;
+	increaseTreeNodesAmount(tree);
+
+	// Increase new node index.
+	increaseTreeNewNodeIndex(tree);
 
 	// Put node into parent's children list.
 	Node* parent = getTreeNodeByIndex(tree, parentIndex);
@@ -120,6 +140,9 @@ void destroyTreeNodeByIndex(Tree* tree, int index) {
 
 		// Destroy node.
 		destroyNode(node);
+
+		// Decreases nodes amount.
+		decreaseTreeNodesAmount(tree);
 	}
 }
 
@@ -129,7 +152,6 @@ void deleteSubtreeByIndex(Tree* tree, int subtreeRootIndex) {
 }
 
 void deleteSubtree(Tree* tree, Node* subtreeRoot) {
-
 	// Disconnect root node from its parent and neighbours.
 	deleteNodeAndItsChildren(subtreeRoot);
 
@@ -163,4 +185,27 @@ void destroyTreeNodesRecursivelyByIndex(Tree* tree, int index) {
 		// Destroy node.
 		destroyTreeNodeByIndex(tree, index);
 	}
+}
+
+// Adds new child of parent and puts it on the right of left neighbour.
+// All nodes on the right of left neighbour become children of a new node.
+void splitTreeNodeByIndex(Tree* tree, int parentIndex, int leftNeighbourIndex) {
+
+	// Initialize new node.
+	Node* node;
+	initializeNode(&node, tree->newNodeIndex);
+
+	// Place new node at the end of the nodes array.
+	(tree->nodesArray)[tree->newNodeIndex] = node;
+
+	// Increase number of nodes.
+	increaseTreeNodesAmount(tree);
+
+	// Increase new node index.
+	increaseTreeNewNodeIndex(tree);
+
+	Node* parent = getTreeNodeByIndex(tree, parentIndex);
+	Node* leftNeighbour = getTreeNodeByIndex(tree, leftNeighbourIndex);
+
+	splitNode(parent, leftNeighbour, node);
 }

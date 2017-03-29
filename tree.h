@@ -11,5 +11,6 @@ extern int getTreeNodesAmount(Tree*);
 extern int getRightmostChildIndexByParentIndex(Tree*, int);
 extern void deleteTreeNodeByIndex(Tree*, int);
 extern void deleteSubtreeByIndex(Tree*, int);
+void splitTreeNodeByIndex(Tree*, int, int);
 
 #endif /* TREE_H */

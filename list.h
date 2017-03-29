@@ -11,6 +11,8 @@ extern void deleteNode(Node*);
 extern void deleteNodeAndItsChildren(Node*);
 extern void linkNodes(Node*, Node*);
 extern void AddNodeToParent(Node*, Node*);
+extern void splitNode(Node*, Node*, Node*);
+
 
 extern bool isLeftmostChild(Node*);
 extern bool isRightmostChild(Node*);
