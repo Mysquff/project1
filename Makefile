@@ -28,8 +28,8 @@ all: solution debug
 
 .PHONY: debug
 debug: $(debug_objects)
-	$(CC) -o solution.gdb $^
+	$(CC) -o solution.dbg $^
 
 .PHONY: clean
 clean:
-	-rm -f $(objects) $(debug_objects) solution solution.gdb
+	-rm -f $(objects) $(debug_objects) solution solution.dbg
