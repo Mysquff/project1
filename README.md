@@ -1,6 +1,6 @@
 # Zadanie Drzewo
 
-**Celem zadania jest implementacja drzewiastej struktury danych w oparciu o listy dwukierunkowe. Początkowo struktura zawiera jeden wierzchołek (korzeń) o numerze 0.**
+Celem zadania jest implementacja drzewiastej struktury danych w oparciu o listy dwukierunkowe. Początkowo struktura zawiera jeden wierzchołek (korzeń) o numerze 0.
 
 ### Operacje na strukturze
 
@@ -33,18 +33,14 @@ NODES: <n>
 ```
 gdzie <n> to liczba wierzchołków aktualnie znajdujących się w strukturze. Nie dopuszczamy innych parametrów wywołania – w przypadku napotkania innego parametru, program powinien wypisać na standardowe wyjście komunikat ERROR i zakończyć działanie z kodem wyjścia 1. Przykład użycia parametrów wywołania programu znajduje się w zasobach na moodle w pliku params.c.
 
-#### Skrypt testujący
+### Skrypt testujący
 Osobną częścią zadania jest napisanie skryptu test.sh. Po wywołaniu
-
-
 ```
 ./test.sh <prog> <dir>
 ```
-
-
 skrypt powinien uruchomić program <prog> dla wszystkich plików wejściowych postaci <dir>/*.in, porównać wyniki z odpowiadającymi im plikami .out, a następnie wypisać, które testy zakończyły się niepowodzeniem. Wywołanie ./test.sh -v <prog> <dir> powinno sprawdzić także poprawność programu uruchomionego z opcją -v. Wyniki z wyjścia diagnostycznego należy porównać z plikami .err.
 
-#### Dane wejściowe
+### Dane wejściowe
 Program powinien czytać ze standardowego wejścia. Można przyjąć następujące założenia o danych wejściowych:
 
 Parametry <k> i <w> są nieujemnymi liczbami całkowitymi mniejszymi niż 231.
@@ -56,18 +52,23 @@ Program będzie miał do dyspozycji 32 MB pamięci. Przed zakończeniem należy 
 Rozwiązanie powinno zawierać następujące pliki:
 
 **tree.h**
+
 Plik nagłówkowy biblioteki wykonującej operacje na drzewiastej strukturze danych. Nie wymagamy tworzenia dodatkowych plików bibliotecznych, niemniej zachęcamy, aby wydzielić implementację różnych części projektu do osobnych plików np. list.h + list.c, parse.h + parse.c, w zależności od podjętych decyzji projektowych.
 
 **tree.c**
+
 Implementacja biblioteki wykonującej operacje na drzewiastej strukturze danych.
 
 **solution.c**
+
 Główny plik programu, w którym wczytujemy wejście i wywołujemy funkcje z pliku tree.h. Plik ten nie powinien znać definicji typów, użytych do implementacji struktury danych.
 
 **test.sh**
+
 Patrz punkt „skrypt testujący”.
 
 **Makefile**
+
 W wyniku wywołania polecenia make powinien zostać wytworzony program wykonywalny solution. Dodatkowo w wyniku wywołania polecenia make debug powinien zostać wytworzony plik solution.dbg, który powinien zawierać symbole do debugowania (opcja -g kompilacji), tak aby ułatwiało to śledzenie wycieków pamięci za pomocą programu valgrind. Jeśli któryś z plików źródłowych ulegnie zmianie, ponowne wpisanie make lub make debug powinno na nowo stworzyć odpowiedni plik wykonywalny. Jeżeli wykonamy polecanie make i make debug w dowolnej kolejności, to powinny pojawić się oba pliki wykonywalne solution i solution.dbg.
 Zachęcamy, by Makefile działał w następujący sposób:
 
@@ -77,8 +78,9 @@ Zachęcamy, by Makefile działał w następujący sposób:
 
 Jednak w tym zadaniu nie będziemy stosować kar punktowych za brak spełnienia tych trzech warunków.
 
-#### Punktacja
+### Punktacja
 Za w pełni poprawne rozwiązanie zadania implementujące wszystkie funkcjonalności można zdobyć maksymalnie 20 punktów. Możliwe są punkty karne za poniższe uchybienia:
+
 - Za wycieki pamięci można stracić co najwyżej 6 punktów.
 - Brak obsługi parametrów wywołania lub błędne wyniki na wyjściu diagnostycznym grożą utratą 4 punktów.
 - Za niezgodną ze specyfikacją strukturę plików w rozwiązaniu można stracić co najwyżej 4 punkty.
