@@ -1,8 +1,8 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
+// Enum type used in identifying a command.
 enum Command;
-
 typedef enum Command Command;
 
 enum Command {
@@ -14,6 +14,7 @@ enum Command {
 	COMMAND_UNKNOWN
 };
 
+// Selects command based on input string.
 extern Command selectCommand(char*);
 
 // ADD_NODE

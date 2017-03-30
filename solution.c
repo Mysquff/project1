@@ -8,7 +8,11 @@
 #include "commands.h"
 #include "parse.h"
 
+/* FUNCTION DECLARATIONS */
+
 void handleParameters(int, char**, bool*);
+
+/* FUNCTION DEFINITIONS */
 
 int main(int argc, char** argv) {
 
@@ -59,6 +63,7 @@ void handleParameters(	int parameterAmount,
 				exit(1);
 			}
 
+			// Free buffer's memory.
 			free(buffer);
 		}
 	}
