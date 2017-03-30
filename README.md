@@ -1,33 +1,36 @@
 # Zadanie Drzewo
 
-Zmiany w treści zadania po 13.03.2017 zostały zaznaczone kolorem czerwonym.
+**Celem zadania jest implementacja drzewiastej struktury danych w oparciu o listy dwukierunkowe. Początkowo struktura zawiera jeden wierzchołek (korzeń) o numerze 0.**
 
-Celem zadania jest implementacja drzewiastej struktury danych w oparciu o listy dwukierunkowe. Początkowo struktura zawiera jeden wierzchołek (korzeń) o numerze 0.
+### Operacje na strukturze
 
-#### Operacje na strukturze
+**ADD_NODE <k>**
 
-ADD_NODE <k>
 Dodaje nowy wierzchołek o numerze o jeden większym od poprzednio utworzonego. Jego rodzicem staje się wierzchołek o numerze <k>. Ustalamy, że nowy wierzchołek umiejscowiony zostaje na prawo od pozostałych dzieci <k>.
 
-RIGHTMOST_CHILD <k>
+**RIGHTMOST_CHILD <k>**
+
 Wypisuje numer wierzchołka, który jest skrajnie prawym dzieckiem <k>. Jeśli <k> jest liściem, wypisuje -1.
 
-DELETE_NODE <k>
+**DELETE_NODE <k>**
+
 Usuwa wierzchołek o numerze <k> (k różne od 0). Krawędzie wychodzące z usuniętego wierzchołka w stronę dzieci zostają zaczepione w jego rodzicu, w tym samym miejscu, z którego wychodziła krawędź w stronę <k>. Kolejność pomiędzy krawędziami zostaje zachowana.
 
-DELETE_SUBTREE <k>
+**DELETE_SUBTREE <k>**
+
 Usuwa wierzchołek o numerze <k> (k różne od 0) razem z całym jego poddrzewem.
 
-SPLIT_NODE <k> <w>
+**SPLIT_NODE <k> <w>**
+
 Dodaje nowy wierzchołek o numerze o jeden większym od poprzednio utworzonego. Jego rodzicem staje się wierzchołek o numerze <k>. Nowy wierzchołek umiejscowiony zostaje na prawo od wierzchołka <w> (można założyć, że <k> jest rodzicem <w>). Dodatkowo wszystkie krawędzie wychodzące z <k>, będące na prawo od wierzchołka o numerze <w>, zostają zaczepione w nowym wierzchołku, z zachowaniem kolejności.
 
 Można założyć, że wierzchołki, których numery występują w poleceniach, znajdują się w strukturze. Wymagamy użycia listy do reprezentacji krawędzi wychodzących z wierzchołków. Każda pojedyncza operacja powinna działać w czasie stałym, za wyjątkiem DELETE_SUBTREE, gdzie czas działania powinien być proporcjonalny do rozmiaru usuwanego poddrzewa. Ponadto po wykonaniu operacji różnej od RIGHTMOST_CHILD należy wypisać jedną linię ze słowem OK.
 
 #### Wyjście diagnostyczne
 Jeśli dodatkowo program zostanie wywołany z parametrem -v, należy dla każdego z poleceń wypisać na standardowe wyjście diagnostyczne (stderr) następujący wiersz:
-
+```
 NODES: <n>
-
+```
 gdzie <n> to liczba wierzchołków aktualnie znajdujących się w strukturze. Nie dopuszczamy innych parametrów wywołania – w przypadku napotkania innego parametru, program powinien wypisać na standardowe wyjście komunikat ERROR i zakończyć działanie z kodem wyjścia 1. Przykład użycia parametrów wywołania programu znajduje się w zasobach na moodle w pliku params.c.
 
 #### Skrypt testujący
@@ -35,8 +38,6 @@ Osobną częścią zadania jest napisanie skryptu test.sh. Po wywołaniu
 
 
 ```
-#!bash
-
 ./test.sh <prog> <dir>
 ```
 
@@ -54,19 +55,19 @@ Program będzie miał do dyspozycji 32 MB pamięci. Przed zakończeniem należy 
 #### Podział na pliki
 Rozwiązanie powinno zawierać następujące pliki:
 
-tree.h
+**tree.h**
 Plik nagłówkowy biblioteki wykonującej operacje na drzewiastej strukturze danych. Nie wymagamy tworzenia dodatkowych plików bibliotecznych, niemniej zachęcamy, aby wydzielić implementację różnych części projektu do osobnych plików np. list.h + list.c, parse.h + parse.c, w zależności od podjętych decyzji projektowych.
 
-tree.c
+**tree.c**
 Implementacja biblioteki wykonującej operacje na drzewiastej strukturze danych.
 
-solution.c
+**solution.c**
 Główny plik programu, w którym wczytujemy wejście i wywołujemy funkcje z pliku tree.h. Plik ten nie powinien znać definicji typów, użytych do implementacji struktury danych.
 
-test.sh
+**test.sh**
 Patrz punkt „skrypt testujący”.
 
-Makefile
+**Makefile**
 W wyniku wywołania polecenia make powinien zostać wytworzony program wykonywalny solution. Dodatkowo w wyniku wywołania polecenia make debug powinien zostać wytworzony plik solution.dbg, który powinien zawierać symbole do debugowania (opcja -g kompilacji), tak aby ułatwiało to śledzenie wycieków pamięci za pomocą programu valgrind. Jeśli któryś z plików źródłowych ulegnie zmianie, ponowne wpisanie make lub make debug powinno na nowo stworzyć odpowiedni plik wykonywalny. Jeżeli wykonamy polecanie make i make debug w dowolnej kolejności, to powinny pojawić się oba pliki wykonywalne solution i solution.dbg.
 Zachęcamy, by Makefile działał w następujący sposób:
 
