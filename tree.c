@@ -4,29 +4,50 @@
 #include "list.h"
 #include "tree.h"
 
+// Size of an nodesArray
 #define MAXIMUM_NUMBER_OF_NODES 500000
 
+// Tree structure based on double-linked lists and array.
 struct Tree {
+	// Number of existent nodes in the tree.
 	int nodesAmount;
+
+	// Number of the new node.
+	// Also number of all the nodes that were ever present in the tree.
 	int newNodeIndex;
 
+	// Array used to store nodes.
 	Node** nodesArray;
 };
 
-/* DECLARATIONS */
+/* FUNCTION DECLARATIONS */
+
+// Main functions.
 void initializeTree(Tree**);
 void destroyTree(Tree*);
-void destroyTreeNodeByIndex(Tree*, int);
-Node* getTreeNodeByIndex(Tree*, int);
+
+// Auxiliary functions.
 void addTreeNode(Tree*, int);
+void splitTreeNodeByIndex(Tree*, int, int);
+void deleteSubtree(Tree*, Node*);
+void deleteSubtreeByIndex(Tree*, int);
+void deleteTreeNodeByIndex(Tree*, int);
+void destroyTreeNodeByIndex(Tree*, int);
+void destroyTreeNodesRecursivelyByIndex(Tree*, int);
+
+// Getters.
 int getTreeNodesAmount(Tree*);
 int getTreeNodeRightmostChildIndexByIndex(Tree*, int);
-void deleteTreeNodeByIndex(Tree*, int);
-void deleteSubtreeByIndex(Tree*, int);
-void deleteSubtree(Tree*, Node*);
-void destroyTreeNodesRecursivelyByIndex(Tree*, int);
-void splitTreeNodeByIndex(Tree*, int, int);
+Node* getTreeNodeByIndex(Tree*, int);
 
+// Setters.
+void decreaseTreeNodesAmount(Tree*);
+void increaseTreeNodesAmount(Tree*);
+void increaseTreeNewNodeIndex(Tree*);
+
+/* FUNCTION DEFINITIONS */
+
+// Main functions.
 
 // Initializes tree.
 void initializeTree(Tree** treePointer) {
@@ -51,18 +72,6 @@ void initializeTree(Tree** treePointer) {
 	tree->newNodeIndex = 1;
 }
 
-void decreaseTreeNodesAmount(Tree* tree) {
-	(tree->nodesAmount)--;
-}
-
-void increaseTreeNodesAmount(Tree* tree) {
-	(tree->nodesAmount)++;
-}
-
-void increaseTreeNewNodeIndex(Tree* tree) {
-	(tree->newNodeIndex)++;
-}
-
 // Destroys tree and frees its memory.
 void destroyTree(Tree* tree) {
 
@@ -78,10 +87,7 @@ void destroyTree(Tree* tree) {
 	free(tree);
 }
 
-// Returns a pointer to the node by its index.
-Node* getTreeNodeByIndex(Tree* tree, int index) {
-	return tree->nodesArray[index];
-}
+// Auxiliary functions.
 
 // Adds new node to the tree.
 void addTreeNode(Tree* tree, int parentIndex) {
@@ -104,17 +110,43 @@ void addTreeNode(Tree* tree, int parentIndex) {
 	AddListNodeToParent(parent, node);
 }
 
-// Returns number of nodes in the tree.
-int getTreeNodesAmount(Tree* tree) {
-	return tree->nodesAmount;
-}
+// Adds new child of parent and puts it on the right of left neighbour.
+// All nodes on the right of left neighbour become children of a new node.
+void splitTreeNodeByIndex(Tree* tree, int parentIndex, int leftNeighbourIndex) {
 
-// Returns an index of a rightmost child. If a child doesn't exist, returns -1.
-int getTreeNodeRightmostChildIndexByIndex(Tree* tree, int parentIndex) {
+	// Initialize new node.
+	Node* node;
+	initializeListNode(&node, tree->newNodeIndex);
+
+	// Place new node at the end of the nodes array.
+	(tree->nodesArray)[tree->newNodeIndex] = node;
+
+	// Increase number of nodes.
+	increaseTreeNodesAmount(tree);
+
+	// Increase new node index.
+	increaseTreeNewNodeIndex(tree);
 
 	Node* parent = getTreeNodeByIndex(tree, parentIndex);
+	Node* leftNeighbour = getTreeNodeByIndex(tree, leftNeighbourIndex);
 
-	return getListNodeRightmostChildIndex(parent);
+	splitListNode(parent, leftNeighbour, node);
+}
+
+// Deletes a node and all its children.
+void deleteSubtree(Tree* tree, Node* subtreeRoot) {
+	// Disconnect root node from its parent and neighbours.
+	deleteListNodeAndItsChildren(subtreeRoot);
+
+	// Destroy subtree recursively.
+	int subtreeRootIndex = getListNodeIndex(subtreeRoot);
+	destroyTreeNodesRecursivelyByIndex(tree, subtreeRootIndex);
+}
+
+// Deletes a node and all its children by index.
+void deleteSubtreeByIndex(Tree* tree, int subtreeRootIndex) {
+	Node* subtreeRoot = getTreeNodeByIndex(tree, subtreeRootIndex);
+	deleteSubtree(tree, subtreeRoot);
 }
 
 // Deletes node and puts its children in its place.
@@ -130,6 +162,7 @@ void deleteTreeNodeByIndex(Tree* tree, int index) {
 
 }
 
+// Destroy single node by index.
 void destroyTreeNodeByIndex(Tree* tree, int index) {
 
 	Node* node = getTreeNodeByIndex(tree, index);
@@ -146,21 +179,7 @@ void destroyTreeNodeByIndex(Tree* tree, int index) {
 	}
 }
 
-void deleteSubtreeByIndex(Tree* tree, int subtreeRootIndex) {
-	Node* subtreeRoot = getTreeNodeByIndex(tree, subtreeRootIndex);
-	deleteSubtree(tree, subtreeRoot);
-}
-
-void deleteSubtree(Tree* tree, Node* subtreeRoot) {
-	// Disconnect root node from its parent and neighbours.
-	deleteListNodeAndItsChildren(subtreeRoot);
-
-	// Destroy subtree recursively.
-	int subtreeRootIndex = getListNodeIndex(subtreeRoot);
-	destroyTreeNodesRecursivelyByIndex(tree, subtreeRootIndex);
-}
-
-// Destroy subtree recursively by indexes.
+// Destroy whole subtree recursively by indexes.
 void destroyTreeNodesRecursivelyByIndex(Tree* tree, int index) {
 
 	Node* node = getTreeNodeByIndex(tree, index);
@@ -187,25 +206,39 @@ void destroyTreeNodesRecursivelyByIndex(Tree* tree, int index) {
 	}
 }
 
-// Adds new child of parent and puts it on the right of left neighbour.
-// All nodes on the right of left neighbour become children of a new node.
-void splitTreeNodeByIndex(Tree* tree, int parentIndex, int leftNeighbourIndex) {
+// Getters.
 
-	// Initialize new node.
-	Node* node;
-	initializeListNode(&node, tree->newNodeIndex);
+// Returns number of nodes in the tree.
+int getTreeNodesAmount(Tree* tree) {
+	return tree->nodesAmount;
+}
 
-	// Place new node at the end of the nodes array.
-	(tree->nodesArray)[tree->newNodeIndex] = node;
-
-	// Increase number of nodes.
-	increaseTreeNodesAmount(tree);
-
-	// Increase new node index.
-	increaseTreeNewNodeIndex(tree);
+// Returns an index of a rightmost child. If a child doesn't exist, returns -1.
+int getTreeNodeRightmostChildIndexByIndex(Tree* tree, int parentIndex) {
 
 	Node* parent = getTreeNodeByIndex(tree, parentIndex);
-	Node* leftNeighbour = getTreeNodeByIndex(tree, leftNeighbourIndex);
 
-	splitListNode(parent, leftNeighbour, node);
+	return getListNodeRightmostChildIndex(parent);
+}
+
+// Returns a pointer to the node by its index.
+Node* getTreeNodeByIndex(Tree* tree, int index) {
+	return tree->nodesArray[index];
+}
+
+// Setters.
+
+// Decreases an amount of tree nodes by 1.
+void decreaseTreeNodesAmount(Tree* tree) {
+	(tree->nodesAmount)--;
+}
+
+// Increases an amount of tree nodes by 1.
+void increaseTreeNodesAmount(Tree* tree) {
+	(tree->nodesAmount)++;
+}
+
+// Increases the index of a new potential node by 1.
+void increaseTreeNewNodeIndex(Tree* tree) {
+	(tree->newNodeIndex)++;
 }
