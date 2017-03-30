@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra
-DEBUG_CFLAGS = -g $(CFLAGS)
+CFLAGS = -Wall -Werror -Wextra -D NDEBUG
+DEBUG_CFLAGS = -g -Wall -Werror -Wextra
 
 sources = solution.c tree.c list.c commands.c parse.c
 objects = $(sources:.c=.o)
