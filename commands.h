@@ -2,17 +2,14 @@
 #define COMMANDS_H
 
 // Enum type used in identifying a command.
-enum Command;
-typedef enum Command Command;
-
-enum Command {
+typedef enum Command {
 	COMMAND_ADD_NODE,
 	COMMAND_RIGHTMOST_CHILD,
 	COMMAND_DELETE_NODE,
 	COMMAND_DELETE_SUBTREE,
 	COMMAND_SPLIT_NODE,
 	COMMAND_UNKNOWN
-};
+} Command;
 
 // Selects command based on input string.
 extern Command selectCommand(char*);
